@@ -1,11 +1,14 @@
-# Docker hadoop yarn cluster for spark 2.4.1
+# Docker hadoop 3.3.5 yarn cluster for spark 3.3.0 and pig 0.17.0
+# Updated to Java 11
+
+# Updated version of https://github.com/PierreKieffer/docker-spark-yarn-cluster/tree/master
 
 <p align="center">
   <img src="logo.jpg">
 </p>
 
 
-Provides Docker multi-nodes Hadoop cluster with Spark 2.4.1 on Yarn. 
+Provides Docker multi-nodes Hadoop cluster with Spark 3.3.0 on Yarn. 
 
 
 * [Usage](#usage)

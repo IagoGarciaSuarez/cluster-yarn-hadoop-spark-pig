@@ -1,27 +1,43 @@
-FROM ubuntu:16.04
+FROM ubuntu:latest
 
 
 USER root
 
-RUN apt-get update && apt-get -y dist-upgrade && apt-get install -y openssh-server default-jdk wget scala
+RUN apt-get update && apt-get -y dist-upgrade && apt-get install -y openssh-server openjdk-11-jdk openjdk-11-jre wget scala
 RUN  apt-get -y update
 RUN  apt-get -y install zip 
 RUN  apt-get -y install vim
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 RUN ssh-keygen -t rsa -f $HOME/.ssh/id_rsa -P "" \
     && cat $HOME/.ssh/id_rsa.pub >> $HOME/.ssh/authorized_keys
 
-RUN wget -O /hadoop.tar.gz -q http://archive.apache.org/dist/hadoop/core/hadoop-2.7.3/hadoop-2.7.3.tar.gz \
+RUN wget -O /hadoop.tar.gz -q https://archive.apache.org/dist/hadoop/core/hadoop-3.3.5/hadoop-3.3.5.tar.gz \
         && tar xfz hadoop.tar.gz \
-        && mv /hadoop-2.7.3 /usr/local/hadoop \
+        && mv /hadoop-3.3.5 /usr/local/hadoop \
         && rm /hadoop.tar.gz
 
-RUN wget -O /spark.tar.gz -q https://archive.apache.org/dist/spark/spark-2.4.1/spark-2.4.1-bin-hadoop2.7.tgz
+RUN wget -O /spark.tar.gz -q https://archive.apache.org/dist/spark/spark-3.3.0/spark-3.3.0-bin-hadoop3.tgz
 RUN tar xfz spark.tar.gz
-RUN mv /spark-2.4.1-bin-hadoop2.7 /usr/local/spark
+RUN mv /spark-3.3.0-bin-hadoop3 /usr/local/spark
 RUN rm /spark.tar.gz
 
+# Descarga Pig y lo instala
+RUN wget http://apache.rediris.es/pig/latest/pig-0.17.0.tar.gz -P /tools/PIIIG && \
+    tar -xzvf /tools/PIIIG/pig-0.17.0.tar.gz -C /tools/PIIIG && \
+    mv /tools/PIIIG/pig-0.17.0 /tools/PIIIG/pig && \
+    rm /tools/PIIIG/pig-0.17.0.tar.gz
+
+# Declara las variables de entorno dentro de .bashrc para Hadoop y Pig
+RUN echo '# Variables de entorno Hadoop y Pig' >> ~/.bashrc && \
+    echo 'export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop/' >> ~/.bashrc && \
+    echo 'export PIG_CLASSPATH=$HADOOP_CONF_DIR' >> ~/.bashrc && \
+    echo 'export PIG_HOME=/tools/PIIIG/pig' >> ~/.bashrc && \
+    echo 'export PATH=$PATH:$PIG_HOME/bin:$JAVA_HOME/bin' >> ~/.bashrc && \
+    echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64' >> ~/.bashrc
+
+# Ejecuta el archivo .bashrc para aplicar los cambios inmediatamente
+RUN /bin/bash -c "source ~/.bashrc" 
 
 ENV HADOOP_HOME=/usr/local/hadoop
 ENV SPARK_HOME=/usr/local/spark
