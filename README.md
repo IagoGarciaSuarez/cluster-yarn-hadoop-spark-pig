@@ -61,7 +61,7 @@ make master-ip
 ```
 ```bash
  ---- MASTER NODE IP ---- 
-Master node ip : 172.20.0.4
+Master node ip : 172.19.0.4
 ```
 - Access to Hadoop cluster Web UI : `master-node-ip:8088`
 - Access to spark Web UI : `master-node-ip:8080`

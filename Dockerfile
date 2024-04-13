@@ -73,6 +73,10 @@ EXPOSE 10020 19888
 EXPOSE 8030 8031 8032 8033 8040 8042 8088
 EXPOSE 49707 2122 7001 7002 7003 7004 7005 7006 7007 8888 9000
 
+COPY ./examples /examples/
+
+RUN hdfs namenode -format -force
+
 ENTRYPOINT service ssh start; cd $SPARK_HOME; bash
 
 

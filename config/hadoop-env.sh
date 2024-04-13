@@ -100,3 +100,7 @@ export HADOOP_IDENT_STRING=$USER
 
 # FIX PROBLEM: ssh: The authenticity of host 'hostname' can't be established
 export HADOOP_SSH_OPTS="-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+
+export HDFS_NAMENODE_USER=root
+export HDFS_DATANODE_USER=root
+export HDFS_SECONDARYNAMENODE_USER=root
