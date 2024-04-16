@@ -3,7 +3,7 @@
 
 build : 
 	@echo " ---- BUILD ---- "
-	@docker build -t spark-hadoop-cluster .
+	@docker build -t hadoop-spark-pig-cluster .
 
 start :
 	@echo " ---- START ---- "
