@@ -29,12 +29,8 @@ RUN wget http://apache.rediris.es/pig/latest/pig-0.17.0.tar.gz -P /tools/PIIIG &
     rm /tools/PIIIG/pig-0.17.0.tar.gz
 
 # Declara las variables de entorno dentro de .bashrc para Hadoop y Pig
-RUN echo '# Variables de entorno Hadoop y Pig' >> ~/.bashrc && \
-    echo 'export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop/' >> ~/.bashrc && \
-    echo 'export PIG_CLASSPATH=$HADOOP_CONF_DIR' >> ~/.bashrc && \
-    echo 'export PIG_HOME=/tools/PIIIG/pig' >> ~/.bashrc && \
-    echo 'export PATH=$PATH:$PIG_HOME/bin:$JAVA_HOME/bin' >> ~/.bashrc && \
-    echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64' >> ~/.bashrc
+COPY /config/bash_config /config/
+RUN cat /config/bash_config >> ~/.bashrc
 
 # Ejecuta el archivo .bashrc para aplicar los cambios inmediatamente
 RUN /bin/bash -c "source ~/.bashrc" 
@@ -64,7 +60,6 @@ RUN mv /tmp/ssh_config $HOME/.ssh/config \
 ADD scripts/spark-services.sh $HADOOP_HOME/spark-services.sh
 
 RUN chmod 744 -R $HADOOP_HOME
-
 
 RUN $HADOOP_HOME/bin/hdfs namenode -format
 

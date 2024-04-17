@@ -1,0 +1,15 @@
+# Variables de entorno Hadoop y Pig'
+export HADOOP_CONF_DIR=$HADOOP_HOME/etc/hadoop/
+export PIG_CLASSPATH=$HADOOP_CONF_DIR
+export PIG_HOME=/tools/PIIIG/pig
+export PATH=$PATH:$PIG_HOME/bin:$JAVA_HOME/bin
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+export YARN_RESOURCEMANAGER_USER=root
+export YARN_NODEMANAGER_USER=root
+
+function init_hsp() {
+    cd /examples
+    hdfs dfs -mkdir /files && hdfs dfs -copyFromLocal /examples/files/* /files/
+    /usr/local/hadoop/sbin/start-all.sh
+    
+} 
